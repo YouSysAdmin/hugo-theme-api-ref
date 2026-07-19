@@ -22,8 +22,11 @@
 
   <ol class="nav-list">
     {{ $here := .RelPermalink }}
+    {{ $home := site.Home.RelPermalink }}
     {{ range $i, $e := $items }}
-      {{ $current := or (eq $here $e.url) (and (ne $e.url "/") (hasPrefix $here $e.url)) }}
+      {{/* Home matches only exactly — with a subpath baseURL (e.g. GitHub Pages
+           project sites) its URL is a prefix of every page, not just "/". */}}
+      {{ $current := or (eq $here $e.url) (and (ne $e.url $home) (hasPrefix $here $e.url)) }}
       <li class="{{ if $current }}is-current{{ end }}">
         <a href="{{ $e.url }}">
           <span class="nav-num">{{ printf "%02d" (add $i 1) }}</span>
