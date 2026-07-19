@@ -1,0 +1,52 @@
+{{ define "main" }}
+<article class="doc">
+  <div class="doc-header">
+    <div class="doc-meta">
+      {{ with .CurrentSection }}<span><a href="{{ .RelPermalink }}">← {{ .Title }}</a></span>{{ end }}
+      <span>{{ .Date.Format "2006-01-02" }}</span>
+      {{ with .Params.authors }}
+        <span class="changelog-authors">
+          {{ range . }}
+            {{ if reflect.IsMap . }}
+              <a class="changelog-author"{{ with .link }} href="{{ . }}" target="_blank" rel="noopener"{{ end }}>
+                {{- with .image }}<img src="{{ . }}" alt="" loading="lazy" />{{ end -}}
+                {{- .name -}}
+              </a>
+            {{ else }}
+              <span class="changelog-author">{{ . }}</span>
+            {{ end }}
+          {{ end }}
+        </span>
+      {{ end }}
+    </div>
+    <h1 class="doc-title">{{ .Title }}</h1>
+    {{ with .Description }}<p class="doc-lead">{{ . }}</p>{{ end }}
+    {{ with .GetTerms "tags" }}
+      <div class="changelog-tags">
+        {{ range . }}<a class="tag" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}
+      </div>
+    {{ end }}
+  </div>
+  <div class="rule"></div>
+  <div class="prose">
+    {{ .Content }}
+  </div>
+
+  {{- /* Prev/next within the changelog, ordered by date (older ← entry → newer). */ -}}
+  {{- $pages := .CurrentSection.RegularPagesRecursive.ByDate -}}
+  {{- $older := false -}}
+  {{- $newer := false -}}
+  {{- range $i, $p := $pages -}}
+    {{- if eq $p.RelPermalink $.RelPermalink -}}
+      {{- if gt $i 0 -}}{{- $older = index $pages (sub $i 1) -}}{{- end -}}
+      {{- if lt (add $i 1) (len $pages) -}}{{- $newer = index $pages (add $i 1) -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{ if or $older $newer }}
+    <nav class="pager" aria-label="Changelog navigation">
+      {{ with $older }}<a class="pager-prev" href="{{ .RelPermalink }}">← {{ .Title }}</a>{{ end }}
+      {{ with $newer }}<a class="pager-next" href="{{ .RelPermalink }}">{{ .Title }} →</a>{{ end }}
+    </nav>
+  {{ end }}
+</article>
+{{ end }}

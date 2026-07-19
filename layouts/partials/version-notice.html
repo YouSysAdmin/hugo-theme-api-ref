@@ -1,0 +1,13 @@
+{{- /* Warning banner shown on pages of any docs version that is not the latest. */ -}}
+{{- $v := partial "funcs/versions.html" . -}}
+{{- with $v.current -}}
+  {{- if and $v.latest (ne . $v.latest) -}}
+    <div class="version-notice">
+      <span class="badge badge-notice">Notice</span>
+      <span>
+        You are viewing documentation for <strong>{{ .Title | upper }}</strong>, which is not the latest API version.
+        <a href="{{ partial "funcs/version-url.html" (dict "page" $ "to" $v.latest) }}">Switch to {{ $v.latest.Title | upper }} →</a>
+      </span>
+    </div>
+  {{- end -}}
+{{- end -}}

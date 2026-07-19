@@ -1,0 +1,46 @@
+<header class="masthead">
+  <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+    <span class="ico-dark" aria-hidden="true">◐</span><span class="ico-light" aria-hidden="true">◑</span>
+    <span class="theme-toggle-label">THEME</span>
+  </button>
+  <div class="masthead-grid">
+    <div class="cell cell-title">
+      <div class="k">DOCUMENT</div>
+      <div class="v">{{ .Site.Params.document }}</div>
+    </div>
+    <div class="cell">
+      <div class="k">TITLE</div>
+      <div class="v">{{ .Site.Title }}</div>
+    </div>
+    {{ $v := partial "funcs/versions.html" . }}
+    {{ $active := $v.current | default $v.latest }}
+    <div class="cell">
+      <div class="k">VERSION</div>
+      {{ if $v.versions }}
+        <div class="v version-wrap">
+          <select class="version-select" aria-label="API version" onchange="if(this.value)location.href=this.value">
+            {{ range $v.versions }}
+              <option value="{{ partial "funcs/version-url.html" (dict "page" $ "to" .) }}"{{ if eq . $active }} selected{{ end }}>
+                {{- .Title | upper }}{{ if .Params.latest }} Latest{{ end -}}
+              </option>
+            {{ end }}
+          </select>
+        </div>
+      {{ else }}
+        <div class="v">{{ .Site.Params.version }}</div>
+      {{ end }}
+    </div>
+    <div class="cell">
+      <div class="k">STATUS</div>
+      <div class="v"><span class="badge">{{ with $active }}{{ .Params.status | default site.Params.status }}{{ else }}{{ .Site.Params.status }}{{ end }}</span></div>
+    </div>
+    <div class="cell cell-wide">
+      <div class="k">BASE URL</div>
+      <div class="v mono-strong">{{ with $active }}{{ .Params.baseURL | default site.Params.baseURL }}{{ else }}{{ .Site.Params.baseURL }}{{ end }}</div>
+    </div>
+    <div class="cell">
+      <div class="k">ORG</div>
+      <div class="v">{{ .Site.Params.org }}</div>
+    </div>
+  </div>
+</header>

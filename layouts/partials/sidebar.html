@@ -1,0 +1,44 @@
+<nav class="sidebar" aria-label="Primary">
+  {{ $v := partial "funcs/versions.html" . }}
+  {{ $active := $v.current | default $v.latest }}
+  <div class="sidebar-head">§ CONTENTS</div>
+
+  {{/*
+       Overview, the active version's pages (by weight),
+       any root-level standalone pages (e.g. /showcase/) then the changelog
+  */}}
+  {{ $items := slice (dict "name" "OVERVIEW" "url" site.Home.RelPermalink) }}
+  {{ with $active }}
+    {{ range .RegularPages.ByWeight }}
+      {{ $items = $items | append (dict "name" (upper .Title) "url" .RelPermalink) }}
+    {{ end }}
+  {{ end }}
+  {{ range site.Home.RegularPages.ByWeight }}
+    {{ $items = $items | append (dict "name" (upper .Title) "url" .RelPermalink) }}
+  {{ end }}
+  {{ with site.GetPage "/changelog" }}
+    {{ $items = $items | append (dict "name" (upper .Title) "url" .RelPermalink) }}
+  {{ end }}
+
+  <ol class="nav-list">
+    {{ $here := .RelPermalink }}
+    {{ range $i, $e := $items }}
+      {{ $current := or (eq $here $e.url) (and (ne $e.url "/") (hasPrefix $here $e.url)) }}
+      <li class="{{ if $current }}is-current{{ end }}">
+        <a href="{{ $e.url }}">
+          <span class="nav-num">{{ printf "%02d" (add $i 1) }}</span>
+          <span class="nav-name">{{ $e.name }}</span>
+        </a>
+      </li>
+    {{ end }}
+  </ol>
+
+  {{ if and (or .IsPage .IsHome) (ne .Params.toc false) }}
+    {{ with .TableOfContents }}
+      {{ if ne . "<nav id=\"TableOfContents\"></nav>" }}
+        <div class="sidebar-head sidebar-head--toc">§ ON THIS PAGE</div>
+        <div class="toc">{{ . }}</div>
+      {{ end }}
+    {{ end }}
+  {{ end }}
+</nav>

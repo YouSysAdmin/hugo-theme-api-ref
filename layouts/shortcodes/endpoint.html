@@ -1,0 +1,8 @@
+{{- $method := .Get "method" | default "GET" -}}
+{{- $path := .Get "path" -}}
+<div class="endpoint">
+  <span class="badge badge-{{ $method | lower }}">{{ $method | upper }}</span>
+  <code class="endpoint-path">{{ $path }}</code>
+  {{- with .Get "auth" }}<span class="endpoint-auth"><svg class="ico-lock" width="11" height="11" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a4 4 0 0 0-4 4v2H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-1V5a4 4 0 0 0-4-4zm2 6H6V5a2 2 0 1 1 4 0v2z"/></svg> {{ . }}</span>{{ end -}}
+</div>
+{{- with .Inner -}}<div class="endpoint-note">{{ $.Page.RenderString . }}</div>{{- end -}}

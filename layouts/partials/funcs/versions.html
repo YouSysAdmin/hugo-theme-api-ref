@@ -1,0 +1,22 @@
+{{- /*
+  Resolve API doc versions. Context: the current page.
+  Returns a dict:
+    versions — all sections under /docs (e.g. v1, v2)
+    latest   — the section with `latest: true` in front matter
+               (falls back to the highest title if none is marked)
+    current  — the version section the context page belongs to, or "" outside /docs
+*/ -}}
+{{- $versions := slice -}}
+{{- $latest := "" -}}
+{{- $current := "" -}}
+{{- with site.GetPage "/docs" -}}
+  {{- $versions = .Sections -}}
+{{- end -}}
+{{- range $versions -}}
+  {{- if .Params.latest -}}{{- $latest = . -}}{{- end -}}
+  {{- if or (eq . $) ($.IsDescendant .) -}}{{- $current = . -}}{{- end -}}
+{{- end -}}
+{{- if and $versions (not $latest) -}}
+  {{- $latest = index (sort $versions "Title" "desc") 0 -}}
+{{- end -}}
+{{- return (dict "versions" $versions "latest" $latest "current" $current) -}}

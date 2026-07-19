@@ -1,0 +1,15 @@
+{{- /*
+  Map a page to its counterpart in another version.
+  Context: dict with "page" (current page) and "to" (target version section).
+  Returns the URL of the same page in the target version if it exists,
+  otherwise the target version's root.
+*/ -}}
+{{- $p := .page -}}
+{{- $to := .to -}}
+{{- $url := $to.RelPermalink -}}
+{{- $v := partial "funcs/versions.html" $p -}}
+{{- with $v.current -}}
+  {{- $target := replace $p.Path .Path $to.Path 1 -}}
+  {{- with site.GetPage $target -}}{{- $url = .RelPermalink -}}{{- end -}}
+{{- end -}}
+{{- return $url -}}

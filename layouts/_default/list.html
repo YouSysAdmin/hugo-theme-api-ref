@@ -1,0 +1,29 @@
+{{ define "main" }}
+<article class="doc">
+  {{ partial "version-notice.html" . }}
+  <div class="doc-header">
+    <h1 class="doc-title">{{ .Title }}</h1>
+    {{ with .Description }}<p class="doc-lead">{{ . }}</p>{{ end }}
+  </div>
+  <div class="rule"></div>
+  <div class="prose">{{ .Content }}</div>
+
+  <table class="index-table">
+    <thead>
+      <tr><th>#</th><th>{{ .Params.indexLabel | default "ENDPOINT" }}</th><th>DESCRIPTION</th></tr>
+    </thead>
+    <tbody>
+      {{ range $i, $p := .Pages }}
+      <tr>
+        <td class="mono-strong">{{ printf "%02d" (add $i 1) }}</td>
+        <td>
+          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+          {{ if .Params.latest }}<span class="badge badge-new">Latest</span>{{ end }}
+        </td>
+        <td>{{ .Description }}</td>
+      </tr>
+      {{ end }}
+    </tbody>
+  </table>
+</article>
+{{ end }}

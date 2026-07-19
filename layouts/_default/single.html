@@ -1,0 +1,24 @@
+{{ define "main" }}
+{{ $v := partial "funcs/versions.html" . }}
+<article class="doc">
+  {{ partial "version-notice.html" . }}
+  <div class="doc-header">
+    <div class="doc-meta">
+      <span>REF/{{ with $v.current }}{{ .Title | upper }}/{{ end }}{{ .File.ContentBaseName | upper }}</span>
+      <span>UPDATED {{ .Lastmod.Format "2006-01-02" }}</span>
+    </div>
+    <h1 class="doc-title">{{ .Title }}</h1>
+    {{ with .Description }}<p class="doc-lead">{{ . }}</p>{{ end }}
+  </div>
+  <div class="rule"></div>
+  <div class="prose">
+    {{ .Content }}
+  </div>
+
+  <nav class="pager">
+    {{/* NextInSection points to the lower-weight page, so it feeds the "prev" link */}}
+    {{ with .NextInSection }}<a class="pager-prev" href="{{ .RelPermalink }}">← {{ .Title }}</a>{{ end }}
+    {{ with .PrevInSection }}<a class="pager-next" href="{{ .RelPermalink }}">{{ .Title }} →</a>{{ end }}
+  </nav>
+</article>
+{{ end }}

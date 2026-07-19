@@ -1,0 +1,7 @@
+# Hugo Modules metadata — lets sites import this theme with:
+#   [[module.imports]]
+#     path = "github.com/YouSysAdmin/hugo-theme-api-ref"
+[module]
+  [module.hugoVersion]
+    extended = false
+    min      = "0.150.0"
