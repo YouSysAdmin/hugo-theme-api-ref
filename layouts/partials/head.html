@@ -3,6 +3,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} — {{ .Site.Title }}{{ end }}</title>
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+  {{ with .Site.Params.org }}<meta name="author" content="{{ . }}">{{ end }}
+
+  {{/* Canonical + social/SEO meta (Open Graph, Twitter cards, Schema.org).
+       Set a default preview image via `images = ["og-image.png"]` in [params],
+       or per page via `images` in front matter. */}}
+  <link rel="canonical" href="{{ .Permalink }}">
+  {{ template "_internal/opengraph.html" . }}
+  {{ template "_internal/twitter_cards.html" . }}
+  {{ template "_internal/schema.html" . }}
+
   <link rel="preload" href="{{ "fonts/SpaceMono-Regular.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ "fonts/SpaceMono-Bold.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
   {{ $css := resources.Get "css/main.css" | resources.Minify | resources.Fingerprint }}

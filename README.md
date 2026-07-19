@@ -16,6 +16,10 @@ A monospace, "datasheet"-style Hugo theme for API reference documentation.
   badge for recent entries, and older/newer navigation.
 - **Endpoint shortcodes** — method/path bars with an auth-required lock badge.
 - **Per-page TOC** — "ON THIS PAGE" list from `<h2>`/`##` headings.
+- **SEO / social meta** — canonical URL, Open Graph, Twitter cards, and
+  Schema.org tags on every page. Set a default preview image with
+  `images = ["og-image.png"]` in `[params]` (override per page via `images`
+  front matter).
 
 ## Requirements
 

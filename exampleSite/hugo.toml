@@ -31,6 +31,11 @@ enableRobotsTXT = true
   # Decorative tractor-feed / punch holes down the left margin (datasheet look).
   sprocketHoles = true
 
+  # Default social preview image(s) for Open Graph / Twitter cards,
+  # relative to the site root (put the file in static/ or assets/).
+  # Pages can override with `images` in front matter.
+  #images = ["og-image.png"]
+
   # Masthead metadata, shown in the bordered header box.
   # status and baseURL come from each version's _index.md front matter (content/docs/<version>/).
   # The params below are optional fallbacks, only used when a version omits them — or, for `version`,
